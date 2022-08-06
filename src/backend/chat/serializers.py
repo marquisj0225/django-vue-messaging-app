@@ -25,7 +25,7 @@ class ChatSerializer(ModelSerializer):
         try:
             recipient = User.objects.get(email=validated_data['recipient'])
         except User.DoesNotExist:
-            raise ValidationError('This Recipient Email Is Not Valied.')
+            raise ValidationError('This recipient email is not exist in the database.')
         
         title = validated_data['title']
         body = validated_data['body']

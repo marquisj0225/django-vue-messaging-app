@@ -1,9 +1,6 @@
 {
-  "name": "DjangoMessageApp",
+  "name": "chatApp",
   "version": "1.0.0",
-  "engines": {
-    "node": "14"
-  },
   "private": true,
   "scripts": {
     "dev": "nuxt",

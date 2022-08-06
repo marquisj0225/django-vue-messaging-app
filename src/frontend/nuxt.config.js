@@ -20,8 +20,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - MessagingApp',
-    title: 'MessagingApp',
+    titleTemplate: '%s - chatApp',
+    title: 'chatApp',
     htmlAttrs: {
       lang: 'en'
     },

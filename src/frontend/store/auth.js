@@ -164,7 +164,7 @@ export const actions = {
           resolve(response);
         })
         .catch((error) => {
-          commit('SET_ERROR', error.response.password);
+          commit('SET_ERROR', error.response.status);
           reject(error);
         });
     });

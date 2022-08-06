@@ -1,2 +1,2 @@
-web: cd src/backend && gunicorn wsgi:application
+web: cd src/backend && gunicorn core.wsgi:application
 release: cd src/backend && ./manage.py migrate

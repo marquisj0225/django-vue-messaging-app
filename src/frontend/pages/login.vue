@@ -156,7 +156,7 @@ export default {
     show1: false,
     rules: {
       required: (value) => !!value || "Required.",
-      min: (v) => (v && v.length >= 8) || "Min 8 characters",
+      min: (v) => (v && v.length >= 5) || "Min 5 characters",
     },
   }),
 
@@ -199,13 +199,37 @@ export default {
             re_password: this.verify,
           })
           .then((res) => {
+            // if registered, log in
             this.$toast.success("You have successfully registered");
-            this.$router.push("/");
+            this.$store
+              .dispatch("auth/LOGIN", {
+                email: this.email,
+                password: this.password,
+              })
+              .then((res) => {
+                this.$toast.success("Succcessfully loged in");
+                this.$router.push("/");
+              })
+              .catch((error) => {
+                if (error) {
+                  if (error.response?.status == 401) {
+                    this.$toast.error(`${error.response?.data?.detail}`);
+                  } else {
+                    this.$toast.error("Error!");
+                  }
+                }
+              });
           })
           .catch((error) => {
             if (error) {
               if (error.response?.status == 401) {
-                this.$toast.error(`${error.response?.data?.detail}`);
+                if ("password" in error.reponse.data) {
+                  this.$toast.error(`${error.response?.data?.password}`);
+                } else if ("detail" in error.response.data) {
+                  this.$toast.error(`${error.response?.data?.detail}`);
+                } else {
+                  this.$toast.error("Registration error!");
+                }
               } else {
                 this.$toast.error("Error!");
               }
