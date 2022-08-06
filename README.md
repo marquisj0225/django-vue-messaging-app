@@ -11,8 +11,17 @@ Featuring:
 
 # OS X Instructions
 ```bash
-$ docker-compose up --build
+# build
+$ docker-compose build
+
+# Database Migrations
 $ docker-compose exec django python manage.py migrate
+
+# or run with logs
+$ docker-compose up --build
+
+# or without logs
+$ docker-compose up --build -d
 ```
 
 # Development
