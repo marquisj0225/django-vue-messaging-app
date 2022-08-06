@@ -16,6 +16,7 @@ export default {
     async logout() {
       await this.$store.dispatch("auth/LOGOUT");
       this.$router.push("/login");
+      this.$router.go()
     },
   },
 };

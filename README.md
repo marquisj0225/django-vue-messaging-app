@@ -7,6 +7,7 @@ Featuring:
 - Docker Compose v1.29.2
 - Python 3.9.13
 - Node 14
+- SQLite3
 
 # OS X Instructions
 ```bash
@@ -25,3 +26,4 @@ http://localhost:8000/
 - Django
 - Nuxt.js
 - Vue
+- SQLite3 (DB)

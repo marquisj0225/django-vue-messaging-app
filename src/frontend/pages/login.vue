@@ -41,7 +41,6 @@
                         :type="show1 ? 'text' : 'password'"
                         name="input-10-1"
                         label="Password"
-                        hint="At least 8 characters"
                         counter
                         @click:append="show1 = !show1"
                       ></v-text-field>
@@ -156,7 +155,7 @@ export default {
     show1: false,
     rules: {
       required: (value) => !!value || "Required.",
-      min: (v) => (v && v.length >= 5) || "Min 5 characters",
+      min: (v) => (v && v.length >= 8) || "Min 8 characters",
     },
   }),
 
@@ -171,7 +170,7 @@ export default {
         // submit form to server/API here...
         await this.$store
           .dispatch("auth/LOGIN", {
-            email: this.email,
+            email: this.loginEmail,
             password: this.loginPassword,
           })
           .then((res) => {
@@ -181,9 +180,7 @@ export default {
           .catch((error) => {
             if (error) {
               if (error.response?.status == 401) {
-                this.$toast.error(`${error.response?.data?.detail}`);
-              } else {
-                this.$toast.error("Error!");
+                this.$toast.error("Please input the correct account credentials.");
               }
             }
           });
@@ -207,15 +204,13 @@ export default {
                 password: this.password,
               })
               .then((res) => {
-                this.$toast.success("Succcessfully loged in");
+                this.$toast.success("Succcessfully Login");
                 this.$router.push("/");
               })
               .catch((error) => {
                 if (error) {
                   if (error.response?.status == 401) {
-                    this.$toast.error(`${error.response?.data?.detail}`);
-                  } else {
-                    this.$toast.error("Error!");
+                    this.$toast.error("Please input the correct account informations to register.");
                   }
                 }
               });
@@ -224,14 +219,14 @@ export default {
             if (error) {
               if (error.response?.status == 401) {
                 if ("password" in error.reponse.data) {
-                  this.$toast.error(`${error.response?.data?.password}`);
+                  this.$toast.error("Password Validation Error!");
                 } else if ("detail" in error.response.data) {
                   this.$toast.error(`${error.response?.data?.detail}`);
                 } else {
-                  this.$toast.error("Registration error!");
+                  this.$toast.error("Registration Error!");
                 }
               } else {
-                this.$toast.error("Error!");
+                this.$toast.error("This email already exists in the database. Please try again with different email!");
               }
             }
           });
