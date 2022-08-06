@@ -27,3 +27,10 @@ http://localhost:8000/
 - Nuxt.js
 - Vue
 - SQLite3 (DB)
+
+# Screenshots
+![Login](/screenshots/login.png?raw=true "Login")
+![Register](/screenshots/register.png?raw=true "Register")
+![Compose](/screenshots/compose.png?raw=true "Compose")
+![Inbox](/screenshots/inbox.png?raw=true "Inbox")
+![Sent](/screenshots/sent.png?raw=true "Sent")
