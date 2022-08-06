@@ -54,6 +54,7 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
+db.sqlite3
 
 # Flask stuff:
 instance/
@@ -116,5 +117,3 @@ src/backend/uploads
 src/frontend/build/*
 src/frontend/node_modules/*
 src/frontend/package-lock.json
-
-src/frontend/nuxt.config.js
