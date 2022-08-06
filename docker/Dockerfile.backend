@@ -1,0 +1,8 @@
+FROM python:3.9.13
+RUN apt-get update && apt-get install -yy gcc build-essential python-setuptools graphviz libgraphviz-dev
+ENV PYTHONUNBUFFERED 1
+ADD requirements.txt .
+RUN pip install -r requirements.txt
+RUN apt-get update && apt-get install -y inotify-tools gdal-bin
+WORKDIR /app
+ENV PYTHONPATH "${PYTHONPATH}:/app/src"

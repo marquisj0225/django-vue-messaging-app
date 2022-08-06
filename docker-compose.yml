@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    command: gunicorn wsgi:application -b :8000 -b :80 --reload
+    volumes:
+      - ./src/backend:/app
+      - ./src/frontend/build:/frontend:cached
+    ports:
+      - 8000:8000
+      - 80:80
+    stdin_open: true
+    tty: true
+
+  builder:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    command: npm run dev
+    environment:
+      - HOST=0.0.0.0
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src/frontend:/app:cached
+      # This _deletes_ the node_modules/ host volume folder in docker, so it uses the docker image
+      # node_modules/ -- if you modify yarn.lock you'll need to build the docker image again.
+      - /app/node_modules
+    depends_on:
+      - django
+
+volumes:
+  myapp:
+
+
