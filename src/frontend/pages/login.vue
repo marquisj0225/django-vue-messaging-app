@@ -69,24 +69,6 @@
               <v-card-text>
                 <v-form ref="registerForm" v-model="valid" lazy-validation>
                   <v-row>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="firstName"
-                        :rules="[rules.required]"
-                        label="First Name"
-                        maxlength="20"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="lastName"
-                        :rules="[rules.required]"
-                        label="Last Name"
-                        maxlength="20"
-                        required
-                      ></v-text-field>
-                    </v-col>
                     <v-col cols="12">
                       <v-text-field
                         v-model="email"
@@ -128,7 +110,7 @@
                         block
                         :disabled="!valid"
                         color="success"
-                        @click="validate"
+                        @click="validateRegister"
                         >Register</v-btn
                       >
                     </v-col>
@@ -174,7 +156,7 @@ export default {
     show1: false,
     rules: {
       required: (value) => !!value || "Required.",
-      min: (v) => (v && v.length >= 5) || "Min 5 characters",
+      min: (v) => (v && v.length >= 8) || "Min 8 characters",
     },
   }),
 
@@ -189,7 +171,7 @@ export default {
         // submit form to server/API here...
         await this.$store
           .dispatch("auth/LOGIN", {
-            email: this.loginEmail,
+            email: this.email,
             password: this.loginPassword,
           })
           .then((res) => {
@@ -199,7 +181,31 @@ export default {
           .catch((error) => {
             if (error) {
               if (error.response?.status == 401) {
-                this.$toast.error(`${this.$t(error.response?.data?.detail)}`);
+                this.$toast.error(`${error.response?.data?.detail}`);
+              } else {
+                this.$toast.error("Error!");
+              }
+            }
+          });
+      }
+    },
+    async validateRegister() {
+      if (this.$refs.registerForm.validate()) {
+        // submit form to server/API here...
+        await this.$store
+          .dispatch("auth/REGISTER", {
+            email: this.email,
+            password: this.password,
+            re_password: this.verify,
+          })
+          .then((res) => {
+            this.$toast.success("You have successfully registered");
+            this.$router.push("/");
+          })
+          .catch((error) => {
+            if (error) {
+              if (error.response?.status == 401) {
+                this.$toast.error(`${error.response?.data?.detail}`);
               } else {
                 this.$toast.error("Error!");
               }

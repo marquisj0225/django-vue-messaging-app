@@ -143,29 +143,15 @@ export const actions = {
   REGISTER(
     { commit },
     {
-      name,
-      position,
-      gender,
-      phone,
-      email,
-      district,
-      password,
-      password_confirm,
+      email, password, re_password
     }
   ) {
     return new Promise((resolve, reject) => {
       this.$axios
         .$post(
-          'auth/registration/register/',
+          '/auth/users/',
           {
-            name,
-            position,
-            gender,
-            phone,
-            email,
-            district,
-            password,
-            password_confirm,
+            email, password, re_password
           },
           {
             headers: {
@@ -174,11 +160,11 @@ export const actions = {
           }
         )
         .then(async (response) => {
-          commit('SET_SIGNATURE', response.signature);
+          commit('SET_USER', response);
           resolve(response);
         })
         .catch((error) => {
-          commit('SET_ERROR', error.response.status);
+          commit('SET_ERROR', error.response.password);
           reject(error);
         });
     });
