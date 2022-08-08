@@ -9,6 +9,7 @@ from rest_framework.views import status
 from django.db.models import Q
 from django.contrib.auth.models import User
 from .models import Chat
+# from .serializers import MessageSerializer, ConversationSerializer
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -86,12 +87,39 @@ class ConversationListViewTest(BaseViewTest):
         self.assertEqual(response.data, serialized.data)
 
     @BaseViewTest.jwt_auth_before
-    def test_post_conversationlist(self):
-        response = self.client.post(self.url, {'with': 'mouath1'})
+    def test_post_conversation(self):
+        response = self.client.post(self.url, {'user':self.email1,'recipient':self.email1,'trash_by_user':False,'trash_by_recipient':False})
+        self.assertEqual(response.data, ['Both the email are same'])
+
+    @BaseViewTest.jwt_auth_before
+    def test_trash_conversation(self):
+        response = self.client.post(self.url, {'user':self.email1,'recipient':self.email1,'trash_by_user':False,'trash_by_recipient':False})
+        self.assertEqual(response.data, ['Both the email are same'])
+
+        response = self.client.post(self.url, {'user':self.email1,'recipient':self.email2,'trash_by_user':False,'trash_by_recipient':False})
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
-        expected = Conversation.objects.all()
-        serialized = ConversationSerializer(expected, many=True)
-        data = serialized.data
-        self.assertEqual(len(data), 2)
-        self.assertEqual(data[1]['participants'], ['mouath', 'mouath1'])
+       
+        response = self.client.post(f"{self.url}/{response.data['id']}/trash/")
+        self.assertEqual(status.HTTP_204_NO_CONENT, response.status_code)
+
+       
+    @BaseViewTest.jwt_auth_before
+    def test_rmtrash_conversation(self):
+ 
+        response = self.client.post(self.url, {'user':self.email1,'recipient':self.email2,'trash_by_user':False,'trash_by_recipient':False})
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+       
+        response = self.client.post(f"{self.url}/{response.data['id']}/rmtrash/")
+        self.assertEqual(status.HTTP_204_NO_CONENT, response.status_code)
+
+    @BaseViewTest.jwt_auth_before
+    def test_unsent_conversation(self):
+ 
+        response = self.client.post(self.url, {'user':self.email1,'recipient':self.email2,'trash_by_user':False,'trash_by_recipient':False})
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+       
+        response = self.client.delete(f"{self.url}/{response.data['id']}/")
+        self.assertEqual(status.HTTP_204_NO_CONENT, response.status_code)
